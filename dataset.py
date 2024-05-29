@@ -22,7 +22,6 @@ vocab to store no of unique chars in the corpus
 with open('utils/config.yaml') as f:
     MASTER_CONFIG = yaml.safe_load(f)
 
- = 
 vocab = sorted(list(set(lines)))
 print('Total number of characters in our dataset (Vocabulary Size):', len(vocab))
 
