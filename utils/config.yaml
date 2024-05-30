@@ -1,7 +1,7 @@
-batch_size: 8          
-context_window: 16
-vocab_size : 
+batch_size: !!int 8          
+context_window: !!int 16
+vocab_size : !!int 65
 d_model : 128
-epochs: 1000        
-log_interval: 10
+epochs: 5000        
+log_interval: 50
 batch_size: 32

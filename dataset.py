@@ -2,9 +2,13 @@ import urllib.request
 import os 
 import torch 
 import yaml
+import logging
 
-#---------------------------------------------------------------------------
-
+#-----------------------------------------------------------------------------------------------------------------------
+log = 'Logs'
+os.makedirs(log,exist_ok=True)
+logging.basicConfig(filename=f'{log}/Data.log', filemode='a', format='%(name)s - %(levelname)s - %(message)s')
+#-----------------------------------------------------------------------------------------------------------------------
 #Download the data if required ~1M
 file_name = "data/tinyshakespeare.txt"
 
@@ -24,7 +28,7 @@ with open('utils/config.yaml') as f:
 
 vocab = sorted(list(set(lines)))
 print('Total number of characters in our dataset (Vocabulary Size):', len(vocab))
-
+logging.info(f'Total number of characters in our dataset (Vocabulary Size):{len(vocab)}')
 #Create the mapping to no for embedding 
 
 itos = {i:c for i,c in enumerate(vocab)}
@@ -42,6 +46,7 @@ print(f"decode {encode('Morning')}:{decode(encode('Morning'))}")
 #create a dataset with all lines in corpus
 dataset = torch.tensor(encode(lines), dtype=torch.int8)
 print(f"Data shape:{dataset.shape}")
+logging.info(f"Data shape:{dataset.shape}")
 
 # Function to get batches for training, validation, or testing
 def get_batches(split, batch_size = 8, context_window = 16, data = dataset):
@@ -65,8 +70,8 @@ def get_batches(split, batch_size = 8, context_window = 16, data = dataset):
     return x, y
 
 # Obtain batches for training using the specified batch size and context window
-xs, ys = get_batches(dataset, 'train')
-
+xs, ys = get_batches(data = dataset, split='train')
+print(f"\nxs:{xs}\n")
 # Decode the sequences to obtain the corresponding text representations
 decoded_samples = [(decode(xs[i].tolist()), decode(ys[i].tolist())) for i in range(len(xs))]
 
