@@ -2,7 +2,8 @@ batch_size: !!int 8
 context_window: !!int 32
 vocab_size : !!int 65
 d_model : 128
-epochs: 5000         
-log_interval: 50
+epochs: 10
+log_interval: 1
 batch_size: 32
 n_heads : 8
+checkpoint : /Checkpoint

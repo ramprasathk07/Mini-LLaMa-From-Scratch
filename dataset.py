@@ -7,7 +7,7 @@ import logging
 #-----------------------------------------------------------------------------------------------------------------------
 log = 'Logs'
 os.makedirs(log,exist_ok=True)
-logging.basicConfig(filename=f'{log}/Data.log', filemode='a', format='%(name)s - %(levelname)s - %(message)s')
+logging.basicConfig(filename=f'{log}/Data.log', filemode='a', format='%(asctime)s - %(message)s',level=logging.INFO)
 #-----------------------------------------------------------------------------------------------------------------------
 #Download the data if required ~1M
 file_name = "data/tinyshakespeare.txt"

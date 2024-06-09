@@ -65,7 +65,7 @@ class RoPEMaskedAttentionHead(nn.Module):
                 return_attn_weights = False):
         
         b,m,d = x.shape
-        print(f"Rotary_embeddings:{b,m,d}")
+        # print(f"Rotary_embeddings:{b,m,d}")
         q = self.w_q(x)
         k = self.w_k(x)
         v = self.w_v(x)
@@ -108,3 +108,22 @@ class RoPEMaskedMultiheadAttention(nn.Module):
         
         return x
     
+
+class SwiGLU(nn.Module):
+    """
+    Swish-Gated Linear Unit
+    https://arxiv.org/pdf/2002.05202v1.pdf
+    """
+    def __init__(self, size):
+        super().__init__()
+        self.linear_gate = nn.Linear(size, size)
+        self.linear = nn.Linear(size, size)
+        self.beta = torch.randn(1, requires_grad=True)
+
+        self.beta = nn.Parameter(torch.ones(1))
+        self.register_parameter("beta", self.beta)
+
+    def forward(self, x): 
+        swish_gate = self.linear_gate(x) * torch.sigmoid(self.beta * self.linear_gate(x))
+        out = swish_gate * self.linear(x)
+        return out

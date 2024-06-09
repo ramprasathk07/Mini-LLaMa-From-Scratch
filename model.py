@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 from torch.nn import functional as F
 from dataset import MASTER_CONFIG
-from utils.llama_feats import RMSNorm,RoPEMaskedMultiheadAttention
+from utils.llama_feats import RMSNorm,RoPEMaskedMultiheadAttention,SwiGLU
 import torch
 torch.autograd.set_detect_anomaly(True)
 
@@ -21,7 +21,7 @@ class LLama(nn.Module):
 
         self.linear = nn.Sequential(
             nn.Linear(config['d_model'], config['d_model']),
-            nn.ReLU(),
+            SwiGLU(config['d_model']),
         )
         
         self.last_linear = nn.Linear(config['d_model'], config['vocab_size'])
@@ -33,9 +33,9 @@ class LLama(nn.Module):
         x = self.embedding(idx)
 
         x = self.RMSnorm(x)
-        x += self.rope_attention(x)
+        x = x + self.rope_attention(x)
         x = self.RMSnorm(x)
-        x += self.linear(x)
+        x = x + self.linear(x)
 
         logits = self.last_linear(x)
 
