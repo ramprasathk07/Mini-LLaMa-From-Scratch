@@ -1,4 +1,5 @@
 import torch 
+torch.autograd.set_detect_anomaly(True)
 from torch.optim import AdamW
 from model import LLama
 import time 
